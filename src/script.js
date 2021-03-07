@@ -66,6 +66,7 @@ scene.add(pointLight);
 //Character Loader
 loader.load("../static/model/Stacy.glb",function(Model){
     model = Model.scene;
+
     //Texture and Material
     let characterTexture = new THREE.TextureLoader().load("../static/model/stacy.jpg");
     characterTexture.flipY = false;
@@ -123,7 +124,7 @@ loader.load("../static/model/Stacy.glb",function(Model){
 
 //Video Player
 const video = document.getElementById("video");
-video.src = "../static/videos/video1.mp4";
+//video.src = "../static/videos/video1.mp4";
 video.crossOrigin = 'anonymous';
 video.addEventListener( 'play', function () {
 this.currentTime = 3;

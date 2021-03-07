@@ -124,7 +124,6 @@ loader.load("../static/model/Stacy.glb",function(Model){
 
 //Video Player
 const video = document.getElementById("video");
-//video.src = "../static/videos/video1.mp4";
 video.crossOrigin = 'anonymous';
 video.addEventListener( 'play', function () {
 this.currentTime = 3;

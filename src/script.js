@@ -1,11 +1,11 @@
 //Import Statements
-import * as THREE from "three";
-import * as dat from "dat.gui";
-import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import WebXRPolyfill from "webxr-polyfill/build/webxr-polyfill.module.js";
-import { QueryArgs } from  "three/external-files/js/util/query-args.js";
+import * as THREE from "../three/build/three.module.js";
+//import * as dat from "dat.gui";
+import { VRButton } from "../three/examples/jsm/webxr/VRButton.js";
+import { OrbitControls } from "../three/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "../three/examples/jsm/loaders/GLTFLoader.js";
+import WebXRPolyfill from "../webxr-polyfill/build/webxr-polyfill.module.js";
+import { QueryArgs } from  "../three/external-files/js/util/query-args.js";
 
 if (QueryArgs.getBool('usePolyfill', true)) {
     let polyfill = new WebXRPolyfill();
@@ -26,7 +26,7 @@ let loaderAnim = document.getElementById('js-loader');
 
 //Scene Loader
 const loader = new GLTFLoader();
-loader.load("home-theater/theater.glb",function(Model){
+loader.load("../static/home-theater/theater.glb",function(Model){
     let model = Model.scene;
     model.position.set(0.05,-2.4,8);
     model.scale.x = model.scale.y = model.scale.z;
@@ -64,10 +64,10 @@ pointLight.position.set(25, 50, 25);
 scene.add(pointLight);
 
 //Character Loader
-loader.load("model/Stacy.glb",function(Model){
+loader.load("../static/model/Stacy.glb",function(Model){
     model = Model.scene;
     //Texture and Material
-    let characterTexture = new THREE.TextureLoader().load("model/stacy.jpg");
+    let characterTexture = new THREE.TextureLoader().load("..static/model/stacy.jpg");
     characterTexture.flipY = false;
     const stacy_mtl = new THREE.MeshPhongMaterial({
         map: characterTexture,
@@ -123,7 +123,7 @@ loader.load("model/Stacy.glb",function(Model){
 
 //Video Player
 const video = document.getElementById("video");
-video.src = "videos/video1.mp4";
+video.src = "../static/videos/video1.mp4";
 video.crossOrigin = 'anonymous';
 video.addEventListener( 'play', function () {
 this.currentTime = 3;
@@ -183,7 +183,7 @@ for ( i=0; i < xgrid; i ++)
 renderer.autoClear = false;
 
 //Adding a Button
-let playTexture = new THREE.TextureLoader().load("buttons/play-button.png",function(txt){
+let playTexture = new THREE.TextureLoader().load("../static/buttons/play-button.png",function(txt){
     const mat = new THREE.MeshBasicMaterial({map : txt});
 }  ,undefined
    ,function(err) {

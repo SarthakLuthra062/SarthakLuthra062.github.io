@@ -67,7 +67,7 @@ scene.add(pointLight);
 loader.load("../static/model/Stacy.glb",function(Model){
     model = Model.scene;
     //Texture and Material
-    let characterTexture = new THREE.TextureLoader().load("..static/model/stacy.jpg");
+    let characterTexture = new THREE.TextureLoader().load("../static/model/stacy.jpg");
     characterTexture.flipY = false;
     const stacy_mtl = new THREE.MeshPhongMaterial({
         map: characterTexture,
@@ -183,14 +183,6 @@ for ( i=0; i < xgrid; i ++)
 renderer.autoClear = false;
 
 //Adding a Button
-let playTexture = new THREE.TextureLoader().load("../static/buttons/play-button.png",function(txt){
-    const mat = new THREE.MeshBasicMaterial({map : txt});
-}  ,undefined
-   ,function(err) {
-       console.error("An error happened");
-   }
-);
-
 let playButton = document.getElementById("startButton");
 playButton.onclick = function(){
     if(video.paused){

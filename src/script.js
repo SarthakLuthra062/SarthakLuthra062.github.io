@@ -187,9 +187,6 @@ function update()
 {
     renderer.render(scene, camera);
     cube_move();
-    if (mixer) {
-        mixer.update(clock.getDelta());
-      }
     controls.update()
 }
 

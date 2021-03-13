@@ -1,16 +1,8 @@
 //Import Statements
-import * as THREE from "three";
-//import * as dat from "dat.gui";
-import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import WebXRPolyfill from "webxr-polyfill/build/webxr-polyfill.module.js";
-import { QueryArgs } from  "three/external-files/js/util/query-args.js";
-//import { XRControllerModelFactory } from "three/examples/jsm/webxr/XRControllerModelFactory.js";;
-
-if (QueryArgs.getBool('usePolyfill', true)) {
-    let polyfill = new WebXRPolyfill();
-  }
+import * as THREE from "../three/build/three.module.js";
+import { VRButton } from "../three/examples/jsm/webxr/VRButton.js";
+import { OrbitControls } from "../three/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "../three/examples/jsm/loaders/GLTFLoader.js";
 
 //Loader
 const preloader = document.getElementById("preloader");
@@ -29,7 +21,6 @@ window.addEventListener("load", fadeEffect);
 //Web-GL scene Globals
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
-//const teleportVR = new TeleportVR(scene, camera);
 camera.position.set(-1.716,-0.5,20.779);
 camera.rotation.set(-11,-0.7,0);
 
@@ -74,7 +65,6 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping=true;
 controls.update();
 
-
 //Lightning
 var ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
 scene.add(ambientLight);
@@ -102,7 +92,6 @@ loader.load("model/Stacy.glb",function(Model){
         o.receiveShadow = true;
         o.material = stacy_mtl;
       }
-      // Reference the neck and waist bones
       if (o.isBone && o.name === 'mixamorigNeck') { 
         neck = o;
       }
@@ -138,7 +127,6 @@ loader.load("model/Stacy.glb",function(Model){
     console.error(error);
   }
 );
-
 
 //Video Player
 const video = document.getElementById("video");
@@ -204,7 +192,6 @@ for ( i=0; i < xgrid; i ++)
 }
 
 renderer.autoClear = false;
-
 //Adding a Button
 let playTexture = new THREE.TextureLoader().load("buttons/play-button.png",function(txt){
     const mat = new THREE.MeshBasicMaterial({map : txt});

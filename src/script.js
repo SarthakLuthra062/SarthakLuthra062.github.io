@@ -1,8 +1,14 @@
 //Import Statements
 import * as THREE from "../three/build/three.module.js";
+//import * as dat from "dat.gui";
 import { VRButton } from "../three/examples/jsm/webxr/VRButton.js";
 import { OrbitControls } from "../three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "../three/examples/jsm/loaders/GLTFLoader.js";
+import WebXRPolyfill from "../webxr-polyfill/build/webxr-polyfill.module.js";
+import { QueryArgs } from  "../three/external-files/js/util/query-args.js";
+
+if (QueryArgs.getBool('usePolyfill', true)) {
+    let polyfill = new WebXRPolyfill();
 
 //Loader
 const preloader = document.getElementById("preloader");

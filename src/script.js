@@ -9,6 +9,7 @@ import { QueryArgs } from  "../three/external-files/js/util/query-args.js";
 
 if (QueryArgs.getBool('usePolyfill', true)) {
     let polyfill = new WebXRPolyfill();
+}
 
 //Loader
 const preloader = document.getElementById("preloader");

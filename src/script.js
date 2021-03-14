@@ -13,7 +13,6 @@ if (QueryArgs.getBool('usePolyfill', true)) {
 
 //Loader
 const preloader = document.querySelector('.preloader');
-
 const fadeEffect = setInterval(() => {
   if (!preloader.style.opacity) {
     preloader.style.opacity = 1;
@@ -24,8 +23,7 @@ const fadeEffect = setInterval(() => {
     clearInterval(fadeEffect);
   }
 }, 200);
-
-window.addEventListener('load', fadeEffect);
+//window.addEventListener('load', fadeEffect);
 
 //Web-GL scene Globals
 var scene = new THREE.Scene();

@@ -22,14 +22,20 @@
           transition: opacity 0.3s linear;
           width: 100%;
           z-index: 9999;
-}
+          opacity: 1;
+          transform: opacity 1s linear;
+        }
+        .preloader.loaded {
+         opacity: 0;
+         pointer-events: none;
+        }
       </style>
 </head>
 <body>
+  <div class="preloader">
+    <img src="static/loader/loaderImg.svg" alt="spinner">
+    </div>
     <div id="canvas">
-      <div class="preloader">
-        <img src="static/loader/loaderImg.svg" alt="spinner">
-        </div>
       <div id="overlay">
         <button id="startButton">Play</button>
       </div>

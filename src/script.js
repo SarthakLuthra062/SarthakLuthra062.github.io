@@ -12,7 +12,7 @@ if (QueryArgs.getBool('usePolyfill', true)) {
 }
 
 //Loader
-const preloader = document.getElementById("preloader");
+const preloader = document.querySelector("preloader");
 const fadeEffect = setInterval(() => {
     if (!preloader.style.opacity) {
       preloader.style.opacity = 1;

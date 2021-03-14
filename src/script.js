@@ -12,14 +12,14 @@ if (QueryArgs.getBool('usePolyfill', true)) {
 }
 
 //Loader
-var startButton = document.getElementById( 'Button' );
+//var startButton = document.getElementById( 'Button' );
 const preloader = document.querySelector('.preloader');
 const fadeEffect = setInterval(() => {
   if (!preloader.style.opacity) {
     preloader.style.opacity = 1;
   }
   if (preloader.style.opacity > 0) {
-    preloader.style.opacity -= 0.1;
+    preloader.style.opacity -= 0.05;
   } else {
     clearInterval(fadeEffect);
   }
@@ -142,7 +142,7 @@ video.src = "../static/videos/video1.mp4";
 video.addEventListener( 'play', function () {
 this.currentTime = 3;
 } );
-video.play();
+video.playOnClick();
 const videoTexture = new THREE.VideoTexture(video);
 
 //Animated Cubes and Video

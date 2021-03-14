@@ -142,7 +142,7 @@ video.src = "../static/videos/video1.mp4";
 video.addEventListener( 'play', function () {
 this.currentTime = 3;
 } );
-video.playOnClick();
+video.play();
 const videoTexture = new THREE.VideoTexture(video);
 
 //Animated Cubes and Video

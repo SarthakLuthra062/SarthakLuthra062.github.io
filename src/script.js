@@ -6,6 +6,7 @@ import { OrbitControls } from "../three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "../three/examples/jsm/loaders/GLTFLoader.js";
 import WebXRPolyfill from "../webxr-polyfill/build/webxr-polyfill.module.js";
 import { QueryArgs } from  "../three/external-files/js/util/query-args.js";
+import { XRControllerModelFactory } from "../three/examples/jsm/webxr/XRControllerModelFactory.js";
 
 if (QueryArgs.getBool('usePolyfill', true)) {
     let polyfill = new WebXRPolyfill();

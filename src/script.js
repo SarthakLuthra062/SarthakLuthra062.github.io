@@ -60,12 +60,23 @@ document.body.appendChild( renderer.domElement );
 let VrButton;
 document.body.appendChild(VrButton = VRButton.createButton( renderer ) );
 
+const controllerModelFactory = new XRControllerModelFactory();
+const controllerGrip1 = renderer.xr.getControllerGrip(0);
+const model1 = controllerModelFactory.createControllerModel( controllerGrip1 );
+controllerGrip1.add( model1 );
+camParent.add(controllerGrip1);
+
+const controllerGrip2 = renderer.xr.getControllerGrip( 1 );
+const model2 = controllerModelFactory.createControllerModel( controllerGrip2 );
+controllerGrip2.add( model2 );
+camParent.add(controllerGrip2);
+
 //VR Camera Settings
 VrButton.addEventListener('VREntered', () => {
   console.log('Entered VR');
-  let camParent = new THREE.Object3D();
   camParent.add(camera);
   camParent.position.set(-1.716,-0.5,18.5);
+  scene.add(camParent);
 });
 
 //Orbit Controls
@@ -262,6 +273,7 @@ function cube_move()
 //Get Mouse Degrees and Cursor Movement
 document.addEventListener("mousemove", function(e) {
     var mousecoords = getMousePos(e);
+    var mousecoords = get
       if (neck && waist) {
         moveJoint(mousecoords, neck, 50);
         moveJoint(mousecoords, waist, 30);

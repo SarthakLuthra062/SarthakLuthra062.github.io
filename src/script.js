@@ -30,6 +30,7 @@ const fadeEffect = setInterval(() => {
 //Web-GL scene Globals
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
+let camParent = new THREE.Object3D();
 camera.position.set(-1.716,-0.5,20.779);
 camera.rotation.set(-11,-0.7,0);
 

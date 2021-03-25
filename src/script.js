@@ -36,6 +36,7 @@ camera.rotation.set(-11,-0.7,0);
 
 //Character Initialisation
 let model,neck,waist,possibleAnims,mixer,idle,clips;
+let videoMove = false;
 let clock = new THREE.Clock();
 let currentlyAnimating = false;
 let raycaster = new THREE.Raycaster();
@@ -197,7 +198,6 @@ for ( i=0; i < xgrid; i ++)
         videoCubeMesh.position.z = 0;
         videoCubeMesh.scale.x = videoCubeMesh.scale.y = videoCubeMesh.scale.z;
         scene.add(videoCubeMesh);
-        console.log(videoCubeMesh);
         videoCubeMesh.dx = 0.001 * (0.5 - Math.random());
         videoCubeMesh.dy = 0.001 * (0.5 - Math.random());
         meshes[cube_count] = videoCubeMesh;
@@ -275,13 +275,12 @@ function cube_move()
 
 //Get Mouse Degrees and Cursor Movement
 document.addEventListener("mousemove", function(e) {
-    var mousecoords = getMousePos(e);
-    var mousecoords = get
-      if (neck && waist) {
-        moveJoint(mousecoords, neck, 50);
-        moveJoint(mousecoords, waist, 30);
-      }
-  });
+  var mousecoords = getMousePos(e);
+    if (neck && waist) {
+      moveJoint(mousecoords, neck, 50);
+      moveJoint(mousecoords, waist, 30);
+    }
+});
 
 function getMousePos(e) {
     return { x: e.clientX, y: e.clientY };

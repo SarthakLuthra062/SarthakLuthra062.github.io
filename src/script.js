@@ -12,6 +12,19 @@ if (QueryArgs.getBool('usePolyfill', true)) {
   let polyfill = new WebXRPolyfill();
 }
 
+//Loader
+const preloader = document.querySelector('.preloader');
+const fadeEffect = setInterval(() => {
+  if (!preloader.style.opacity) {
+    preloader.style.opacity = 1;
+  }
+  if (preloader.style.opacity > 0) {
+    preloader.style.opacity -= 0.05;
+  } else {
+    clearInterval(fadeEffect);
+  }
+}, 200);
+
 //Web-GL scene Globals
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);

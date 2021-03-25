@@ -12,7 +12,7 @@ if (QueryArgs.getBool('usePolyfill', true)) {
 }
 
 //Loader
-const preloader = document.querySelector('.preloader');
+/*const preloader = document.querySelector('.preloader');
 const fadeEffect = setInterval(() => {
   if (!preloader.style.opacity) {
     preloader.style.opacity = 1;
@@ -23,7 +23,7 @@ const fadeEffect = setInterval(() => {
     clearInterval(fadeEffect);
     preloader.classList.remove("preloader");
   }
-}, 200);
+}, 200);*/
 
 //Web-GL scene Globals
 var scene = new THREE.Scene();

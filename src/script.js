@@ -21,6 +21,7 @@ const fadeEffect = setInterval(() => {
     preloader.style.opacity -= 0.05;
   } else {
     clearInterval(fadeEffect);
+    preloader.classList.remove("preloader");
   }
 }, 200);
 

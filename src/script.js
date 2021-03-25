@@ -12,7 +12,7 @@ if (QueryArgs.getBool('usePolyfill', true)) {
 }
 
 //Loader
-/*const preloader = document.querySelector('.preloader');
+const preloader = document.querySelector('.preloader');
 const fadeEffect = setInterval(() => {
   if (!preloader.style.opacity) {
     preloader.style.opacity = 1;
@@ -21,9 +21,10 @@ const fadeEffect = setInterval(() => {
     preloader.style.opacity -= 0.05;
   } else {
     clearInterval(fadeEffect);
-    preloader.classList.remove("preloader");
+    var elem = document.getElementById("preloader");
+    elem.remove();
   }
-}, 200);*/
+}, 200);
 
 //Web-GL scene Globals
 var scene = new THREE.Scene();
@@ -210,15 +211,6 @@ for ( i=0; i < xgrid; i ++)
 }
 
 renderer.autoClear = false;
-
-//Adding a Button
-/*let playTexture = new THREE.TextureLoader().load("buttons/play-button.png",function(txt){
-  const mat = new THREE.MeshBasicMaterial({map : txt});
-}  ,undefined
- ,function(err) {
-     console.error("An error happened");
- }
-);*/
 
 //Window Resize function
 window.addEventListener("resize", () => {

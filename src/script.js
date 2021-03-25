@@ -30,8 +30,10 @@ const fadeEffect = setInterval(() => {
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
 let camParent = new THREE.Object3D();
-camera.position.set(-1.716,-0.5,20.779);
-camera.rotation.set(-11,-0.7,0);
+camParent.add(camera);
+camParent.position.set(-1.716,-0.5,18.5);
+scene.add(camParent);
+console.log(camParent.position);
 
 //Character Initialisation
 let model,neck,waist,possibleAnims,mixer,idle,clips;
@@ -78,9 +80,7 @@ controllerGrip2.add( model2 );
 //VR Camera Settings
 VrButton.addEventListener('VREntered', () => {
 console.log('Entered VR');
-camParent.add(camera);
-camParent.position.set(-1.716,-0.5,18.5);
-scene.add(camParent);
+camParent.position.set(-1.43,1.60,18.44);
 });
 
 //Orbit Controls
@@ -426,7 +426,7 @@ function update()
     ] );;
     const line = new THREE.Line( lineGeometry,lineMaterial);
     line.name = 'line';
-    line.scale.z = 5;
+    line.scale.z = 10;
     controllerGrip1.add( line.clone() );
     controllerGrip2.add( line.clone() );
     camParent.add(controllerGrip1);

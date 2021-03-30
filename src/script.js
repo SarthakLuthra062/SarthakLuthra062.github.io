@@ -33,7 +33,6 @@ let camParent = new THREE.Object3D();
 camParent.add(camera);
 camParent.position.set(-1.716,-0.5,18.5);
 scene.add(camParent);
-console.log(camParent.position);
 
 //Character Initialisation
 let model,neck,waist,possibleAnims,mixer,idle,clips;
@@ -43,6 +42,7 @@ let currentlyAnimating = false;
 let raycaster = new THREE.Raycaster();
 let loaderAnim = document.getElementById('js-loader');
 let objArr = [];
+let jazzMode=false;
 
 //Scene Loader
 const loader = new GLTFLoader();
@@ -66,27 +66,49 @@ let VrButton;
 document.body.appendChild(VrButton = VRButton.createButton( renderer ) );
 
 //VR Controller Setup
+const controller1 = renderer.xr.getController(0);
+controller1.addEventListener("selectstart", onSelectStart);
+
+const controller2 = renderer.xr.getController(1);
+controller2.addEventListener("selectstart", onSelectStart);
+
+
 const controllerModelFactory = new XRControllerModelFactory();
+
 const controllerGrip1 = renderer.xr.getControllerGrip(0);
-const model1 = controllerModelFactory.createControllerModel( controllerGrip1 );
-controllerGrip1.add( model1 );
+controllerGrip1.add(
+  controllerModelFactory.createControllerModel(controllerGrip1)
+);
 
-const controllerGrip2 = renderer.xr.getControllerGrip( 1 );
-const model2 = controllerModelFactory.createControllerModel( controllerGrip2 );
-controllerGrip2.add( model2 );
+const controllerGrip2 = renderer.xr.getControllerGrip(1);
+controllerGrip2.add(
+  controllerModelFactory.createControllerModel(controllerGrip2)
+);
 
+controller1.addEventListener("selectstart", onSelectStart);
+controller2.addEventListener("selectstart",onSelectStart);
 
+camParent.add(controller1);
+camParent.add(controller2);
+camParent.add(controllerGrip1);
+camParent.add(controllerGrip2);
+
+let linecolor = new THREE.Color();
+let lineMaterial = new THREE.LineBasicMaterial({ color: linecolor.setHex(Math.random() * 0xffffff)});
+let lineGeometry = new THREE.BufferGeometry().setFromPoints( [ 
+  new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -1 ) 
+] );;
+const line = new THREE.Line( lineGeometry,lineMaterial);
+line.name = 'line';
+line.scale.z = 5;
+controller1.add( line.clone() );
+controller2.add( line.clone() );
 
 //VR Camera Settings
 VrButton.addEventListener('VREntered', () => {
 console.log('Entered VR');
 camParent.position.set(-1.43,1.60,18.44);
 });
-
-//Orbit Controls
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping=true;
-controls.update();
 
 //Lightning
 var ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
@@ -99,8 +121,8 @@ scene.add(pointLight);
 loader.load("../static/model/Stacy.glb",function(Model){
   model = Model.scene;
   model.name = "stacy";
-  console.log(model.name);
   objArr.push(model);
+
   //Texture and Material
   let characterTexture = new THREE.TextureLoader().load("../static/model/stacy.jpg");
   characterTexture.flipY = false;
@@ -125,7 +147,6 @@ loader.load("../static/model/Stacy.glb",function(Model){
       waist = o;
     }
   });
-  
   model.scale.set(3.5,3.5,3.5);
   model.position.set(-4.5,-5,2.572)
   scene.add(model);
@@ -157,7 +178,6 @@ function(error) {
 
 //Video Player
 const video = document.getElementById("video");
-video.src = "../static/videos/video1.mp4";
 video.addEventListener( 'play', function () {
 this.currentTime = 3;
 } );
@@ -191,15 +211,17 @@ for ( i=0; i < xgrid; i ++)
       materials[cube_count] = new THREE.MeshLambertMaterial(parameter);
       material = materials[cube_count];
       material.hue = i / xgrid;
-      material.saturation = 1 - j / ygrid;  
-      material.color.setHSL(material.hue,material.saturation,0.5);
+      material.saturation = 1 - j / ygrid;
+      if(jazzMode)
+      {
+        material.color.setHSL(material.hue,material.saturation,0.5);
+      }  
       videoCubeMesh = new THREE.Mesh(geometry, material);
       videoCubeMesh.position.x = ( i -xgrid / 2) * xsize;
       videoCubeMesh.position.y = ( j - ygrid / 2) * ysize;
       videoCubeMesh.position.z = 0;
       videoCubeMesh.scale.x = videoCubeMesh.scale.y = videoCubeMesh.scale.z;
       scene.add(videoCubeMesh);
-      //console.log(videoCubeMesh);
       videoCubeMesh.dx = 0.001 * (0.5 - Math.random());
       videoCubeMesh.dy = 0.001 * (0.5 - Math.random());
       meshes[cube_count] = videoCubeMesh;
@@ -237,11 +259,14 @@ let h, counter = 1;
 function cube_move()
 {
   const time = Date.now() * 0.00005;
+  if(jazzMode==true)
+  {
   for ( let i = 0; i < cube_count; i ++ ) 
   {
       material = materials[ i ];
       h = ( 360 * ( material.hue + time ) % 360 ) / 360;
       material.color.setHSL( h, material.saturation, 0.5 );
+  }
   }
   if ( counter % 1000 > 200 ) 
   {
@@ -267,6 +292,25 @@ function cube_move()
   counter ++;
 }
 
+
+//Button Raycasting
+const button1 = new THREE.BoxGeometry(1,1,1);
+const mat1 = new THREE.MeshLambertMaterial({
+  map: THREE.ImageUtils.loadTexture("../static/texture/btn1.jpg")});
+const btnMesh1 = new THREE.Mesh(button1,mat1);
+btnMesh1.name="Button1";
+scene.add(btnMesh1);
+btnMesh1.position.set(3,2,2.572);
+
+const mat2 = new THREE.MeshLambertMaterial({
+  map: THREE.ImageUtils.loadTexture("../static/texture/btn2.jpg")});
+const btnMesh2 = new THREE.Mesh(button1,mat2);
+btnMesh2.name="Button2";
+scene.add(btnMesh2);
+btnMesh2.position.set(5,2,2.572);
+objArr.push(btnMesh1);
+objArr.push(btnMesh2);
+
 //Get Mouse Degrees and Cursor Movement
 document.addEventListener("mousemove", function(e) {
   var mousecoords = getMousePos(e);
@@ -275,6 +319,63 @@ document.addEventListener("mousemove", function(e) {
       moveJoint(mousecoords, waist, 30);
     }
 });
+
+//Click to Change Anim
+
+window.addEventListener('click', e => raycast(e));
+window.addEventListener('touchend', e => raycast(e, true));
+
+function raycast(e, touch = false) {
+  var mouse = {};
+  if (touch) {
+    mouse.x = 2 * (e.changedTouches[0].clientX / window.innerWidth) - 1;
+    mouse.y = 1 - 2 * (e.changedTouches[0].clientY / window.innerHeight);
+  } else {
+    mouse.x = 2 * (e.clientX / window.innerWidth) - 1;
+    mouse.y = 1 - 2 * (e.clientY / window.innerHeight);
+  }
+
+  raycaster.setFromCamera(mouse,camera);
+  var intersects = raycaster.intersectObjects(objArr, true);
+  if (intersects.length) {
+    var object = intersects[0].object;
+    console.log(object);
+    if (object.name === 'stacy') {
+      if (!currentlyAnimating) {
+        currentlyAnimating = true;
+        playOnClick();
+      }
+    }
+    if (object.name === 'Button1') 
+    {
+      video.src = "../static/videos/video2.mp4";
+      video.play();
+    }
+    if (object.name === 'Button2') {
+      video.src = "../static/videos/video1.mp4";
+      jazzMode=true;
+      videoMove=true;
+      video.play();
+    }
+  }
+}
+
+function playOnClick() {
+  let anim = Math.floor(Math.random() * possibleAnims.length) + 0;
+  playModifierAnimation(idle, 0.25, possibleAnims[anim], 0.25);
+}
+
+function playModifierAnimation(from, fSpeed, to, tSpeed) {
+  to.setLoop(THREE.LoopOnce);
+  to.reset();
+  to.play();
+  from.crossFadeTo(to, fSpeed, true);
+  setTimeout(function() {
+    from.enabled = true;
+    to.crossFadeTo(from, tSpeed, true);
+    currentlyAnimating = false;
+  }, to._clip.duration * 1000 - ((tSpeed + fSpeed) * 1000));
+}
 
 function getMousePos(e) {
   return { x: e.clientX, y: e.clientY };
@@ -320,104 +421,66 @@ function getMouseDegrees(x, y, degreeLimit) {
   }
   return { x: dx, y: dy };
 } 
-let raycastMatrix = new THREE.Matrix4(); 
+const raycastMatrix = new THREE.Matrix4();
+
 //Raycaster Physics
-
 function objIntersection(controller){
-raycastMatrix.extractRotation(controller.matrixWorld)
-raycaster.ray.origin.setFromMatrixPosition(controller.matrixWorld);
-raycaster.ray.direction.applyMatrix4(raycastMatrix);
-raycaster.far=1;
-vrRaycast();
+  raycastMatrix.identity().extractRotation(controller.matrixWorld)
+  raycaster.ray.origin.setFromMatrixPosition(controller.matrixWorld);
+  raycaster.ray.direction.applyMatrix4(raycastMatrix);
+  vrRaycast();
 }
-
 function vrRaycast()
 {
-let intersects = raycaster.intersectObjects(scene.children, true);
-if (intersects[0]) {
-  console.log(intersects[0]);
-  var object = intersects[0].object;
-  console.log(object);
-  if(!videoMove)
-  {
-    video.play();
-    videoMove=true;
-  }
-  if (!currentlyAnimating) {
-    currentlyAnimating = true;
-    playOnClick();
-  }
-}
-}
-
-//Raycasting VR Controller
-function onSelectStart( event ) {
-objIntersection(event.target);
-}
-
-
-controllerGrip1.addEventListener( 'selectstart', onSelectStart );
-controllerGrip2.addEventListener( 'selectstart', onSelectStart );
-
-//Click to Change Anim
-window.addEventListener("click", e => raycast(e));
-window.addEventListener("touchend", e => raycast(e, true));
-
-function raycast(e, touch = false) {
-var mouse = {};
-if (touch) {
-  mouse.x = 2 * (e.changedTouches[0].clientX / window.innerWidth) - 1;
-  mouse.y = 1 - 2 * (e.changedTouches[0].clientY / window.innerHeight);
-} else {
-  mouse.x = 2 * (e.clientX / window.innerWidth) - 1;
-  mouse.y = 1 - 2 * (e.clientY / window.innerHeight);
-}
-raycaster.setFromCamera(mouse, camera);
-var intersects = raycaster.intersectObjects(scene.children, true);
-
-if (intersects[0]) {
-  var object = intersects[0].object;
-
-  if (object.name === 'stacy') {
-    if (!currentlyAnimating) {
-      currentlyAnimating = true;
-      playOnClick();
+  var intersects = raycaster.intersectObjects(objArr, true);
+  if (intersects.length) {
+    var object = intersects[0].object;
+    console.log(object);
+    console.log(object.name);
+    if (object.name === 'stacy') {
+      if (!currentlyAnimating) {
+        currentlyAnimating = true;
+        playOnClick();
+      }
+    }
+    if (object.name === 'Button1') 
+    {
+      video.src = "../static/videos/video2.mp4";
+      video.play();
+    }
+    if (object.name === 'Button2') {
+      video.src = "../static/videos/video1.mp4";
+      jazzMode=true;
+      videoMove=true;
+      video.play();
     }
   }
 }
+
+function onSelectStart(event) {
+  objIntersection(event.target);
 }
 
-function playOnClick() {
-  let anim = Math.floor(Math.random() * possibleAnims.length) + 0;
-  playModifierAnimation(idle, 0.25, possibleAnims[anim], 0.25);
-}
-
-function playModifierAnimation(from, fSpeed, to, tSpeed) {
-  to.setLoop(THREE.LoopOnce);
-  to.reset();
-  to.play();
-  from.crossFadeTo(to, fSpeed, true);
-  setTimeout(function() {
-    from.enabled = true;
-    to.crossFadeTo(from, tSpeed, true);
-    currentlyAnimating = false;
-  }, to._clip.duration * 1000 - ((tSpeed + fSpeed) * 1000));
-} 
+//Orbit Controls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping=true;
+controls.update();
 
 //Update Function
 function update()
 {
   renderer.render(scene, camera);
+  controls.update();
   if(videoMove==true)
   {
     cube_move();
   }
-  if (mixer) {
-      mixer.update(clock.getDelta());
-    }
-
-  var time = clock.getElapsedTime();
-  if ( renderer.xr.isPresenting && time > 2 ) 
+  if (mixer) 
+  {
+    mixer.update(clock.getDelta());
+  }
+  //var time = clock.getElapsedTime();
+  /*if ( renderer.xr.isPresenting && time > 2 ) 
   {
     let linecolor = new THREE.Color();
     let lineMaterial = new THREE.LineBasicMaterial({ color: linecolor.setHex(Math.random() * 0xffffff)});
@@ -431,8 +494,7 @@ function update()
     controllerGrip2.add( line.clone() );
     camParent.add(controllerGrip1);
     camParent.add(controllerGrip2);
-    }
-    controls.update();
+    }*/
 }
 
 function animate() {
